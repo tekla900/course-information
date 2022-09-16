@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+const Header = ({ header }) => (
+  <h1>{header}</h1>
+)
+
 const Button = ({ handleEvent, text }) => (
   <button onClick={handleEvent}>
     {text}
@@ -20,6 +24,8 @@ const App = () => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0]);
 
+  const maxVote = votes.indexOf(Math.max(...votes));
+
   const generateRandom = () => {
     setSelected(Math.floor((Math.random() * anecdotes.length)));
   }
@@ -33,10 +39,14 @@ const App = () => {
 
   return (
     <div>
+      <Header header={'Anecdote of the day'} />
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <Button handleEvent={generateRandom} text='next anecdote' />
       <Button handleEvent={vote} text='vote' />
+
+      <Header header={'Anecdote with most votes'} />
+      <p>{anecdotes[maxVote]}</p>
     </div>
   )
 }
