@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-const Header = ({ header }) => {
+const Header = ({ header }) => (
     <h1>{header}</h1>
-}
+)
 
 const Button = ({ handleEvent, text }) => (
   <button onClick={handleEvent}>
@@ -17,6 +17,9 @@ const Stats = ({ name, quantity }) => (
 const Statistics = ({ good, neutral, bad }) => {
   const allRating = good + neutral + bad;
 
+  if (!allRating) {
+    return (<p>No feedback given</p>)
+  }
   return (
     <div>
       <Stats name="good" quantity={good} />
