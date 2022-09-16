@@ -11,7 +11,10 @@ const Button = ({ handleEvent, text }) => (
 )
 
 const Stats = ({ name, quantity }) => (
-  <p>{name} {quantity}</p>
+  <tr>
+    <td>{name}</td> 
+    <td>{quantity}</td>
+  </tr> 
 )
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -21,14 +24,16 @@ const Statistics = ({ good, neutral, bad }) => {
     return (<p>No feedback given</p>)
   }
   return (
-    <div>
+    <table>
+      <tbody>
       <Stats name="good" quantity={good} />
       <Stats name="neutral" quantity={neutral} />
       <Stats name="bad" quantity={bad} />
       <Stats name="all" quantity={allRating} />
       <Stats name="average" quantity={(good - bad)/allRating} />
       <Stats name="positive" quantity={good/allRating*100} />
-    </div>
+      </tbody>  
+    </table>
   )
 }
 
