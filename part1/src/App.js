@@ -21,8 +21,8 @@ const Content = ({ parts }) => {
   )
 }
 
-const Total = (props) => {
-  const sum = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises;
+const Total = ({ parts }) => {
+  const sum = parts[0].exercises + parts[1].exercises + parts[2].exercises;
   return (
     <p>Number of exercises {sum}</p>
   )
@@ -63,7 +63,13 @@ const App = () => {
     ]
   }
 
-  return <Course course={course} />
+  return (
+    <div>
+      <Course course={course} />
+      <Total parts={course.parts} />
+    </div>
+  )
+  
 }
 
 export default App
