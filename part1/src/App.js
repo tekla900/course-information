@@ -22,14 +22,14 @@ const Content = ({ parts }) => {
 }
 
 const Total = ({ parts }) => {
-  const sum = parts[0].exercises + parts[1].exercises + parts[2].exercises;
+  const sum = parts.map(each => each.exercises)
+            .reduce((each, tot) => each + tot);
   return (
     <p>Number of exercises {sum}</p>
   )
 }
 
 const Course = (props) => {
-  console.log(props.course.parts);
   return (
     <div>
       <Header name={props.course.name} />
