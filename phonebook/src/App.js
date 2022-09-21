@@ -56,7 +56,6 @@ const App = () => {
           setTimeout(() => {
             setErrorMessage(null)
           }, 100)
-          setNotes(notes.filter(n => n.id !== id))
         })
       }
     }
