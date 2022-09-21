@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
@@ -22,18 +23,27 @@ const App = () => {
     event.preventDefault()
 
     const found = persons.find(element => element.name.toLowerCase() === newName.toLowerCase());
+    const personObject = {
+      name: newName,
+      number: newNumber,
+    };
 
     if (found) {
-      alert(`${newName} is already added in phonebook`);
-      setNewName('');
+      const confirmed = window.confirm(`${newName} is already added to phonebook,
+      replace the old number with the new one? `);
+      if(confirmed) {
+        const id = persons.filter(each => each.name == newName)[0].id;
+        const person = persons.find(p => p.id === id);
+        const changedPerson = {...person, number: newNumber};
+
+        axios
+        .put(`http://localhost:3001/persons/${id}`, changedPerson)
+        .then(response => {
+          setPersons(persons.map(each => each.id !== id ? each : response.data));
+        })
+      }
     }
     else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1
-      };
-
       phonebook
         .create(personObject)
         .then(returnedPerson => {
@@ -54,8 +64,21 @@ const App = () => {
 
   const handleSearch = (event) => {
     setNewSearch(event.target.value);
-    console.log(event.target.value);
   }
+
+  const handleDelete = event => {
+    const id = event.target.value;
+    const name = persons.filter(each => each.id == id)[0].name;
+    if (window.confirm(`Delete ${name} ?`)) {
+      axios
+        .delete(`http://localhost:3001/persons/${id}`)
+        .then(response => {
+          setPersons(persons.filter(each => each.id != id));
+          console.log(response);
+        })
+    }
+  }
+    
 
   const personsToShow = persons.filter(each => {
     if (each.name.toLowerCase().includes(newSearch.toLowerCase())) {
@@ -75,7 +98,7 @@ const App = () => {
                   handleNumberChange={handleNumberChange}
                   />
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
     </div>
   )
 }
