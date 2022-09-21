@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
+import phonebook from './services/phonebook';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,12 +11,12 @@ const App = () => {
   const [newSearch, setNewSearch] = useState('');
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    phonebook
+      .getAll()
+      .then(initialContacts => {
+        setPersons(initialContacts)
       })
-  }, [])
+  }, []);
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -34,13 +34,13 @@ const App = () => {
         id: persons.length + 1
       };
 
-      axios
-        .post('http://localhost:3001/persons', personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data));
+      phonebook
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
-        });
+        })
     }
   };
 

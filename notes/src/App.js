@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Note from './components/Note';
 import noteService from './services/notes'
 
@@ -17,9 +16,6 @@ const App = () => {
       })
   }, [])
 
-
-
-
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -34,7 +30,6 @@ const App = () => {
       setNotes(notes.concat(returnedNote))
       setNewNote('')
     })
-
   };
 
   const handleNoteChange = (event) => {
@@ -46,7 +41,6 @@ const App = () => {
     : notes.filter(note => note.important === true);
 
   const toggleImportanceOf = id => {
-    const url = `http://localhost:3003/notes/${id}`
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
   
