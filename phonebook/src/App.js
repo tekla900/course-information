@@ -2,21 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
+import Notification from './components/Notification';
+import Error from './components/Error';
 import Filter from './components/Filter';
 import phonebook from './services/phonebook';
 import './index.css';
 
-const Notification = ({ message }) => {
-  if (message === null) {
-    return null;
-  }
 
-  return (
-    <div className='sucessful'>
-      {message}
-    </div>
-  )
-}
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -24,6 +16,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
   const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     phonebook
@@ -55,6 +48,15 @@ const App = () => {
         .then(response => {
           setPersons(persons.map(each => each.id !== id ? each : response.data));
           setMessage(`Changed number for ${newName}`);
+        })
+        .catch(error => {
+          setErrorMessage(
+            `Note '${newName}' was already removed from server`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 100)
+          setNotes(notes.filter(n => n.id !== id))
         })
       }
     }
@@ -106,6 +108,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <Notification message={message} />
+      <Error message={errorMessage} />
       <Filter newSearch={newSearch} handleSearch={handleSearch} />
       <h3>add a new</h3>
       <PersonForm addPerson={addPerson}
