@@ -4,12 +4,26 @@ import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
 import phonebook from './services/phonebook';
+import './index.css';
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return (
+    <div className='sucessful'>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newSearch, setNewSearch] = useState('');
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     phonebook
@@ -40,6 +54,7 @@ const App = () => {
         .put(`http://localhost:3001/persons/${id}`, changedPerson)
         .then(response => {
           setPersons(persons.map(each => each.id !== id ? each : response.data));
+          setMessage(`Changed number for ${newName}`);
         })
       }
     }
@@ -50,6 +65,7 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
+          setMessage(`Added ${newName}}`);
         })
     }
   };
@@ -89,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} />
       <Filter newSearch={newSearch} handleSearch={handleSearch} />
       <h3>add a new</h3>
       <PersonForm addPerson={addPerson}
