@@ -55,7 +55,8 @@ const App = () => {
           )
           setTimeout(() => {
             setErrorMessage(null)
-          }, 100)
+          }, 1000)
+          setPersons(persons.filter(n => n.id !== id))
         })
       }
     }
@@ -66,7 +67,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
-          setMessage(`Added ${newName}}`);
+          setMessage(`Added ${newName}`);
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 1000);
         })
     }
   };
@@ -91,7 +95,6 @@ const App = () => {
         .delete(`http://localhost:3001/persons/${id}`)
         .then(response => {
           setPersons(persons.filter(each => each.id != id));
-          console.log(response);
         })
     }
   }
