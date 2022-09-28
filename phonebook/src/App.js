@@ -43,10 +43,9 @@ const App = () => {
         const person = persons.find(p => p.id === id);
         const changedPerson = {...person, number: newNumber};
 
-        axios
-        .put(`http://localhost:3001/persons/${id}`, changedPerson)
-        .then(response => {
-          setPersons(persons.map(each => each.id !== id ? each : response.data));
+        phonebook
+        .update(id, changedPerson).then(returnedPerson => {
+          setPersons(persons.map(each => each.id !== id ? each : returnedPerson));
           setMessage(`Changed number for ${newName}`);
         })
         .catch(error => {
@@ -91,8 +90,8 @@ const App = () => {
     const id = event.target.value;
     const name = persons.filter(each => each.id == id)[0].name;
     if (window.confirm(`Delete ${name} ?`)) {
-      axios
-        .delete(`http://localhost:3001/persons/${id}`)
+      phonebook
+        .deletePerson(id)
         .then(response => {
           setPersons(persons.filter(each => each.id != id));
         })
